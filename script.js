@@ -34,36 +34,4 @@ document.addEventListener('DOMContentLoaded', () => {
     if (currentDayNav) {
         currentDayNav.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
-});
-
-// WhatsApp sharing functionality
-async function shareToWhatsApp(imageUrl) {
-    // First try using the Web Share API
-    if (navigator.share) {
-        try {
-            await navigator.share({
-                url: imageUrl,
-                title: 'Daily Darshan',
-            });
-            return;
-        } catch (error) {
-            console.log('Web Share API failed, trying alternative method');
-        }
-    }
-
-    // Try WhatsApp Web API as fallback
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    const whatsappBaseUrl = isMobile ? 'whatsapp://send' : 'https://web.whatsapp.com/send';
-    
-    // Create WhatsApp share URL
-    const text = encodeURIComponent('Daily Darshan\n' + imageUrl);
-    const whatsappUrl = `${whatsappBaseUrl}?text=${text}`;
-
-    // Try to open WhatsApp
-    try {
-        window.open(whatsappUrl, '_blank');
-    } catch (error) {
-        // If all else fails, try direct WhatsApp API
-        window.location.href = `https://api.whatsapp.com/send?text=${text}`;
-    }
-} 
+}); 
