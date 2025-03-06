@@ -34,4 +34,31 @@ document.addEventListener('DOMContentLoaded', () => {
     if (currentDayNav) {
         currentDayNav.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
-}); 
+});
+
+// WhatsApp sharing functionality
+function shareToWhatsApp(imageUrl) {
+    fetch(imageUrl)
+    .then(response => response.blob())
+    .then(blob => {
+        const file = new File([blob], "image.jpg", { type: "image/jpeg" });
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = "image/*";
+        input.files = dataTransfer.files;
+        input.onchange = () => {
+            navigator.share({
+                files: [file],
+            }).catch(error => console.error("Sharing failed", error));
+        };
+
+        input.click();
+    })
+    .catch(error => {
+        console.error("Image download failed", error);
+        alert("Failed to share image. Please try again.");
+    });
+} 
