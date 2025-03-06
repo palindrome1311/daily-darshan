@@ -89,26 +89,48 @@ main {
     height: auto;
     border-radius: 10px;
     transition: transform 0.3s ease;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 .day-section img:hover {
     transform: scale(1.02);
 }
 
-.aarti-link {
+.button-group {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.aarti-link, .whatsapp-share {
     display: inline-block;
-    background-color: #ff9933;
-    color: white;
     padding: 0.8rem 1.5rem;
     text-decoration: none;
     border-radius: 25px;
-    transition: background-color 0.3s ease;
-    margin: 0 auto;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.aarti-link {
+    background-color: #ff9933;
+    color: white;
+}
+
+.whatsapp-share {
+    background-color: #25D366;
+    color: white;
 }
 
 .aarti-link:hover {
     background-color: #e67300;
+    transform: translateY(-2px);
+}
+
+.whatsapp-share:hover {
+    background-color: #128C7E;
+    transform: translateY(-2px);
 }
 
 @keyframes fadeIn {
@@ -158,5 +180,15 @@ main {
 
     .day-section {
         padding: 0.8rem;
+    }
+
+    .button-group {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .aarti-link, .whatsapp-share {
+        width: 100%;
+        text-align: center;
     }
 } 
