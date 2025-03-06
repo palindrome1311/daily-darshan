@@ -37,28 +37,33 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // WhatsApp sharing functionality
-function shareToWhatsApp(imageUrl) {
-    fetch(imageUrl)
-    .then(response => response.blob())
-    .then(blob => {
-        const file = new File([blob], "image.jpg", { type: "image/jpeg" });
-        const dataTransfer = new DataTransfer();
-        dataTransfer.items.add(file);
+async function shareToWhatsApp(imageUrl) {
+    // First try using the Web Share API
+    if (navigator.share) {
+        try {
+            await navigator.share({
+                url: imageUrl,
+                title: 'Daily Darshan',
+            });
+            return;
+        } catch (error) {
+            console.log('Web Share API failed, trying alternative method');
+        }
+    }
 
-        const input = document.createElement("input");
-        input.type = "file";
-        input.accept = "image/*";
-        input.files = dataTransfer.files;
-        input.onchange = () => {
-            navigator.share({
-                files: [file],
-            }).catch(error => console.error("Sharing failed", error));
-        };
+    // Try WhatsApp Web API as fallback
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    const whatsappBaseUrl = isMobile ? 'whatsapp://send' : 'https://web.whatsapp.com/send';
+    
+    // Create WhatsApp share URL
+    const text = encodeURIComponent('Daily Darshan\n' + imageUrl);
+    const whatsappUrl = `${whatsappBaseUrl}?text=${text}`;
 
-        input.click();
-    })
-    .catch(error => {
-        console.error("Image download failed", error);
-        alert("Failed to share image. Please try again.");
-    });
+    // Try to open WhatsApp
+    try {
+        window.open(whatsappUrl, '_blank');
+    } catch (error) {
+        // If all else fails, try direct WhatsApp API
+        window.location.href = `https://api.whatsapp.com/send?text=${text}`;
+    }
 } 
